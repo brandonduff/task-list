@@ -1,31 +1,36 @@
 export default class TaskCollection {
-  constructor(...entries) {
-    this.entries = entries;
-    this.listeners = [];
-  }
+    constructor(...entries) {
+      this.entries = entries;
+      this.listeners = [];
+    }
 
-  add(task) {
-    this.entries.push(task)
-    this.notifyListeners();
-  }
+    add(task) {
+      this.entries.push(task)
+      this.notifyListeners();
+    }
 
-  sort() {
-    this.entries.sort((a, b) => {
-      if (a.name === b.name)
-        return 0;
-      else if(a.name < b.name)
-        return -1;
-      else
-        return 1;
-    });
-    this.notifyListeners();
-  }
+    getEntries() {
+      return [...this.entries]
+    }
 
-  notifyListeners() {
-    this.listeners.forEach(listener => listener());
-  }
+    sort() {
+      this.entries.sort((a, b) => {
+        if (a.name === b.name)
+          return 0;
+        else if(a.name < b.name)
+          return -1;
+        else
+          return 1;
+      });
+      this.notifyListeners();
+    }
 
-  register(listener) {
-    this.listeners.push(listener)
+    notifyListeners() {
+      this.listeners.forEach(listener => listener());
+    }
+
+    register(listener) {
+      this.listeners.push(listener)
+    }
   }
 }

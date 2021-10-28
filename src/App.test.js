@@ -20,6 +20,7 @@ describe('TaskListView', () => {
   it('should rerender when taskCollection notifies of changes', function () {
     const taskCollection = new TaskCollection();
     render(<TaskListView taskCollection={taskCollection} />)
+    
     act(() => {
       taskCollection.add({ name: 'do the dishes' });
     })
@@ -31,9 +32,10 @@ describe('TaskListView', () => {
 describe('SortButton', () => {
   it('should have a button to sort the collection', function () {
     const taskCollection = new TaskCollection({ name: 'b' }, { name: 'a' });
-
     render(<TaskListView taskCollection={taskCollection} />)
+
     fireEvent.click(screen.getByText('Sort'));
+
     expect(taskCollection.entries[0].name).toEqual('a');
   });
 });
@@ -42,7 +44,9 @@ describe('AddButton', () => {
   it('should have a button to add a New Task', function () {
     const taskCollection = new TaskCollection();
     render(<TaskListView taskCollection={taskCollection} />)
+
     fireEvent.click(screen.getByText('Add New Task'));
+
     expect(taskCollection.entries[0].name).toEqual('New Task')
   });
 });
@@ -52,6 +56,7 @@ describe('TaskCollection', () => {
   const update = () => {
     updated = true;
   }
+
   beforeEach(() => {
     updated = false;
   })
@@ -65,13 +70,17 @@ describe('TaskCollection', () => {
   test('notifies observers on add', () => {
     const subject = new TaskCollection();
     subject.register(update);
+
     subject.add({ name: 'a task' })
+
     expect(updated).toBeTruthy();
   });
 
   test('can be sorted', () => {
     const subject = new TaskCollection({ name: 'b' }, { name: 'a' });
+
     subject.sort();
+
     expect(subject.entries[0].name).toEqual('a');
     expect(subject.entries[1].name).toEqual('b');
   })
@@ -79,7 +88,9 @@ describe('TaskCollection', () => {
   test('notifies observers on sort', () => {
     const subject = new TaskCollection();
     subject.register(update);
+
     subject.sort();
+
     expect(updated).toBeTruthy();
   });
 });

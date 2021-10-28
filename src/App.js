@@ -10,11 +10,11 @@ function App() {
 }
 
 export function TaskListView({taskCollection}) {
-  const [tasks, setTasks] = useState(taskCollection.entries);
+  const [tasks, setTasks] = useState(taskCollection.getEntries());
 
   useEffect(() => {
     taskCollection.register(() => {
-      setTasks([...taskCollection.entries]);
+      setTasks(taskCollection.getEntries());
     });
     // should return function to deregister in real app
   });
