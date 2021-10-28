@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import {useEffect, useState} from "react";
+import TaskCollection from "./TaskCollection";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TaskListView taskCollection={new TaskCollection({name: 'wash the car'}, {name: 'do the dishes'})} />
     </div>
   );
+}
+
+export function TaskListView({taskCollection}) {
+  const [tasks, setTasks] = useState(taskCollection.entries);
+
+  useEffect(() => {
+    taskCollection.register(() => {
+      setTasks([...taskCollection.entries]);
+    });
+    // should return function to deregister in real app
+  });
+
+  return (
+    <>
+      <button onClick={() => taskCollection.sort()}>Sort</button>
+      <button onClick={() => taskCollection.add({ name: 'New Task' })}>Add New Task</button>
+        <div>
+          {tasks.map(entry => {
+            return <div key={entry.name}>{entry.name}</div>
+          })}
+        </div>
+    </>
+  )
 }
 
 export default App;
