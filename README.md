@@ -1,3 +1,12 @@
+Proof of Concept for using the Observer pattern to hook Javascript objects into React apps.
+
+The idea here is that by making our React component listen for changes to a separate object, we can push logic into it making it more reusable and easier to test.
+
+Our tests that interact with buttons don't have to look at the UI in order to verify results, they can look at the collection object.
+
+Our tests for our logic (i.e. sorting, adding to the collection) don't need to know about React at all.
+
+What does it look like to put things like server communication behind the TaskCollection?
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
