@@ -1,8 +1,10 @@
 export default class ServerSyncer {
-  constructor(taskCollection, { onTaskSynced = () => {} }) {
-    this.taskCollection = taskCollection;
+  constructor({ onTaskSynced = () => {} } = {}) {
     this.onTaskSynced = onTaskSynced;
+  }
 
+  register(taskCollection) {
+    this.taskCollection = taskCollection;
     this.taskCollection.register(() => this.sync())
   }
 

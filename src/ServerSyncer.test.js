@@ -6,7 +6,8 @@ describe('ServerSyncer', function () {
     const syncedTasks = [];
     const onTaskSynced = task => syncedTasks.push(task);
     const taskCollection = new TaskCollection({ name: 'a' });
-    const subject = new ServerSyncer(taskCollection, { onTaskSynced });
+    const subject = new ServerSyncer({ onTaskSynced });
+    subject.register(taskCollection);
 
     taskCollection.add({ name: 'b' })
 

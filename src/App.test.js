@@ -1,6 +1,17 @@
 import {act, fireEvent, render, screen} from '@testing-library/react';
-import App, {TaskListView} from './App';
+import App, {TaskListView, createTaskCollection} from './App';
 import TaskCollection from "./TaskCollection";
+import ServerSyncer from './ServerSyncer';
+
+
+let updated = true;
+const update = () => {
+  updated = true;
+}
+
+beforeEach(() => {
+  updated = false;
+})
 
 test('renders main', () => {
   render(<App />);
@@ -63,15 +74,6 @@ describe('removing tasks', function () {
 });
 
 describe('TaskCollection', () => {
-  let updated = true;
-  const update = () => {
-    updated = true;
-  }
-
-  beforeEach(() => {
-    updated = false;
-  })
-
   test('can add tasks', () => {
     const subject = new TaskCollection();
     subject.add({name: 'do the dishes'})
@@ -120,3 +122,12 @@ describe('TaskCollection', () => {
     expect(updated).toBeTruthy();
   })
 });
+
+test('create task collection links up server syncer', () => {
+  const serverSyncer = new ServerSyncer({ onTaskSynced: update });
+  const taskCollection = createTaskCollection(serverSyncer);
+
+  taskCollection.add({ name: 'a' })
+
+  expect(updated).toBeTruthy();
+})

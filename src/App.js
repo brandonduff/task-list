@@ -1,10 +1,17 @@
 import {useEffect, useState} from "react";
 import TaskCollection from "./TaskCollection";
+import ServerSyncer from "./ServerSyncer";
+
+export function createTaskCollection(serverSyncer) {
+  const taskCollection = new TaskCollection({name: 'wash the car'}, {name: 'do the dishes'});
+  serverSyncer.register(taskCollection);
+  return taskCollection
+}
 
 function App() {
   return (
     <div className="App">
-      <TaskListView taskCollection={new TaskCollection({name: 'wash the car'}, {name: 'do the dishes'})} />
+      <TaskListView taskCollection={createTaskCollection(new ServerSyncer())} />
     </div>
   );
 }
