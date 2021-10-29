@@ -5,7 +5,13 @@ export default class TaskCollection {
   }
 
   add(task) {
-    this.entries.push(task)
+    this.entries.push(task);
+    this.notifyListeners();
+  }
+
+  remove(candidate) {
+    const i = this.entries.findIndex(task => task.name === candidate.name);
+    this.entries.splice(i, 1);
     this.notifyListeners();
   }
 

@@ -20,7 +20,7 @@ describe('TaskListView', () => {
   it('should rerender when taskCollection notifies of changes', function () {
     const taskCollection = new TaskCollection();
     render(<TaskListView taskCollection={taskCollection} />)
-    
+
     act(() => {
       taskCollection.add({ name: 'do the dishes' });
     })
@@ -48,6 +48,17 @@ describe('AddButton', () => {
     fireEvent.click(screen.getByText('Add New Task'));
 
     expect(taskCollection.entries[0].name).toEqual('New Task')
+  });
+});
+
+describe('removing tasks', function () {
+  it('should have a button to remove tasks', function () {
+    const taskCollection = new TaskCollection({ name: 'remove me' });
+    render(<TaskListView taskCollection={taskCollection} />)
+
+    fireEvent.click(screen.getByText('x'));
+
+    expect(taskCollection.entries.length).toEqual(0)
   });
 });
 
@@ -93,4 +104,19 @@ describe('TaskCollection', () => {
 
     expect(updated).toBeTruthy();
   });
+
+  test('can remove tasks', () => {
+    const subject = new TaskCollection();
+    subject.add({ name: 'a' })
+    subject.add({ name: 'b' })
+    subject.remove({ name: 'a' })
+    expect(subject.getEntries()).not.toContainEqual({ name: 'a' })
+  });
+
+  test('notifies listeners on remove', () => {
+    const subject = new TaskCollection();
+    subject.register(update)
+    subject.remove({ name: 'a' })
+    expect(updated).toBeTruthy();
+  })
 });

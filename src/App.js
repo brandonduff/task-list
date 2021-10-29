@@ -23,7 +23,7 @@ export function TaskListView({taskCollection}) {
       <button onClick={() => taskCollection.add({ name: 'New Task' })}>Add New Task</button>
         <div>
           {tasks.map(entry => {
-            return <div key={entry.name}>{entry.name}</div>
+            return <div key={entry.name}><span>{entry.name}</span><button onClick={() => taskCollection.remove(entry)}>x</button></div>
           })}
         </div>
     </>
