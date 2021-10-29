@@ -15,6 +15,10 @@ export default class TaskCollection {
     this.notifyListeners();
   }
 
+  last() {
+    return this.entries[this.entries.length - 1];
+  }
+
   getEntries() {
     return [...this.entries]
   }
