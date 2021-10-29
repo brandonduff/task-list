@@ -15,7 +15,7 @@ export function TaskListView({taskCollection}) {
   useEffect(() => {
     taskCollection.register(setTasks);
     // should return function to deregister in real app
-  });
+  }, [taskCollection]);
 
   return (
     <>
