@@ -5,11 +5,11 @@ export default class ServerSyncer {
 
   register(taskCollection) {
     this.taskCollection = taskCollection;
-    this.taskCollection.register(() => this.sync())
+    this.taskCollection.register(() => this.sync());
   }
 
   sync() {
-    console.log('task synced', this.taskCollection.last().name);
+    console.log("task synced", this.taskCollection.last().name);
     this.onTaskSynced(this.taskCollection.last());
   }
 }

@@ -10,7 +10,7 @@ export default class TaskCollection {
   }
 
   remove(candidate) {
-    const i = this.entries.findIndex(task => task.name === candidate.name);
+    const i = this.entries.findIndex((task) => task.name === candidate.name);
     this.entries.splice(i, 1);
     this.notifyListeners();
   }
@@ -20,26 +20,23 @@ export default class TaskCollection {
   }
 
   getEntries() {
-    return [...this.entries]
+    return [...this.entries];
   }
 
   sort() {
     this.entries.sort((a, b) => {
-      if (a.name === b.name)
-        return 0;
-      else if (a.name < b.name)
-        return -1;
-      else
-        return 1;
+      if (a.name === b.name) return 0;
+      else if (a.name < b.name) return -1;
+      else return 1;
     });
     this.notifyListeners();
   }
 
   notifyListeners() {
-    this.listeners.forEach(listener => listener(this.getEntries()));
+    this.listeners.forEach((listener) => listener(this.getEntries()));
   }
 
   register(listener) {
-    this.listeners.push(listener)
+    this.listeners.push(listener);
   }
 }

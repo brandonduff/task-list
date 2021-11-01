@@ -7,6 +7,7 @@ Our tests that interact with buttons don't have to look at the UI in order to ve
 Our tests for our logic (i.e. sorting, adding to the collection) don't need to know about React at all.
 
 What does it look like to put things like server communication behind the TaskCollection?
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
