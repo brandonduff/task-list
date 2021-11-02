@@ -9,6 +9,8 @@ export default class ServerSyncer {
   }
 
   sync() {
+    // replace this with actual server syncing code. can use patterns like NullableInfrastructure to let collaborators
+    // use this in tests
     console.log("task synced", this.taskCollection.last().name);
     this.onTaskSynced(this.taskCollection.last());
   }
