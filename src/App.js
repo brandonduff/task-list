@@ -20,7 +20,7 @@ function App() {
 }
 
 function useTasks(taskCollection) {
-  const { sort, add, remove, getEntries, register } = taskCollection;
+  const { getEntries, register, ...rest } = taskCollection;
   const [tasks, setTasks] = useState(getEntries());
 
   useEffect(() => {
@@ -30,9 +30,7 @@ function useTasks(taskCollection) {
 
   return {
     tasks,
-    sort,
-    add,
-    remove,
+    ...rest,
   };
 }
 
