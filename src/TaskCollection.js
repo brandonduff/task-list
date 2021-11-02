@@ -1,4 +1,8 @@
 export default class TaskCollection {
+  static create(...entries) {
+    return new TaskCollection(...entries);
+  }
+
   constructor(...entries) {
     this.entries = entries;
     this.listeners = [];

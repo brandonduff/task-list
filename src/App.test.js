@@ -19,7 +19,7 @@ test("renders main", () => {
 
 describe("TaskListView", () => {
   it("should display a list of tasks", function () {
-    const taskCollection = new TaskCollection();
+    const taskCollection = TaskCollection.create();
     taskCollection.add({ name: "do the dishes" });
 
     render(<TaskListView taskCollection={taskCollection} />);
@@ -28,7 +28,7 @@ describe("TaskListView", () => {
   });
 
   it("should rerender when taskCollection notifies of changes", function () {
-    const taskCollection = new TaskCollection();
+    const taskCollection = TaskCollection.create();
     render(<TaskListView taskCollection={taskCollection} />);
 
     act(() => {
@@ -41,7 +41,7 @@ describe("TaskListView", () => {
 
 describe("SortButton", () => {
   it("should have a button to sort the collection", function () {
-    const taskCollection = new TaskCollection({ name: "b" }, { name: "a" });
+    const taskCollection = TaskCollection.create({ name: "b" }, { name: "a" });
     render(<TaskListView taskCollection={taskCollection} />);
 
     fireEvent.click(screen.getByText("Sort"));
@@ -52,7 +52,7 @@ describe("SortButton", () => {
 
 describe("AddButton", () => {
   it("should have a button to add a New Task", function () {
-    const taskCollection = new TaskCollection();
+    const taskCollection = TaskCollection.create();
     render(<TaskListView taskCollection={taskCollection} />);
 
     fireEvent.click(screen.getByText("Add New Task"));
@@ -63,7 +63,7 @@ describe("AddButton", () => {
 
 describe("removing tasks", function () {
   it("should have a button to remove tasks", function () {
-    const taskCollection = new TaskCollection({ name: "remove me" });
+    const taskCollection = TaskCollection.create({ name: "remove me" });
     render(<TaskListView taskCollection={taskCollection} />);
 
     fireEvent.click(screen.getByText("x"));
@@ -74,13 +74,13 @@ describe("removing tasks", function () {
 
 describe("TaskCollection", () => {
   test("can add tasks", () => {
-    const subject = new TaskCollection();
+    const subject = TaskCollection.create();
     subject.add({ name: "do the dishes" });
     expect(subject.entries[0].name).toEqual("do the dishes");
   });
 
   test("notifies observers on add", () => {
-    const subject = new TaskCollection();
+    const subject = TaskCollection.create();
     subject.register(update);
 
     subject.add({ name: "a task" });
@@ -89,7 +89,7 @@ describe("TaskCollection", () => {
   });
 
   test("can be sorted", () => {
-    const subject = new TaskCollection({ name: "b" }, { name: "a" });
+    const subject = TaskCollection.create({ name: "b" }, { name: "a" });
 
     subject.sort();
 
@@ -98,7 +98,7 @@ describe("TaskCollection", () => {
   });
 
   test("notifies observers on sort", () => {
-    const subject = new TaskCollection();
+    const subject = TaskCollection.create();
     subject.register(update);
 
     subject.sort();
@@ -107,7 +107,7 @@ describe("TaskCollection", () => {
   });
 
   test("can remove tasks", () => {
-    const subject = new TaskCollection();
+    const subject = TaskCollection.create();
     subject.add({ name: "a" });
     subject.add({ name: "b" });
     subject.remove({ name: "a" });
@@ -115,7 +115,7 @@ describe("TaskCollection", () => {
   });
 
   test("notifies listeners on remove", () => {
-    const subject = new TaskCollection();
+    const subject = TaskCollection.create();
     subject.register(update);
     subject.remove({ name: "a" });
     expect(updated).toBeTruthy();
