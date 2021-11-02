@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import TaskCollection from "./TaskCollection";
+import { createTaskCollection } from "./TaskCollection";
 import ServerSyncer from "./ServerSyncer";
 
-export function createTaskCollection(serverSyncer) {
-  const taskCollection = TaskCollection.create(
+export function buildTaskCollection(serverSyncer) {
+  const taskCollection = createTaskCollection(
     { name: "wash the car" },
     { name: "do the dishes" }
   );
@@ -14,24 +14,25 @@ export function createTaskCollection(serverSyncer) {
 function App() {
   return (
     <div className="App">
-      <TaskListView taskCollection={createTaskCollection(new ServerSyncer())} />
+      <TaskListView taskCollection={buildTaskCollection(new ServerSyncer())} />
     </div>
   );
 }
 
 function useTasks(taskCollection) {
-  const [tasks, setTasks] = useState(taskCollection.getEntries());
+  const { sort, add, remove, getEntries, register } = taskCollection;
+  const [tasks, setTasks] = useState(getEntries());
 
   useEffect(() => {
-    taskCollection.register(setTasks);
+    register(setTasks);
     // should return function to deregister in real app
   }, [taskCollection]);
 
   return {
     tasks,
-    sort: taskCollection.sort.bind(taskCollection),
-    add: taskCollection.add.bind(taskCollection),
-    remove: taskCollection.remove.bind(taskCollection),
+    sort,
+    add,
+    remove,
   };
 }
 

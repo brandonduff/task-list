@@ -1,11 +1,11 @@
 import ServerSyncer from "./ServerSyncer";
-import TaskCollection from "./TaskCollection";
+import { createTaskCollection } from "./TaskCollection";
 
 describe("ServerSyncer", function () {
   it("should sync new tasks", function () {
     const syncedTasks = [];
     const onTaskSynced = (task) => syncedTasks.push(task);
-    const taskCollection = TaskCollection.create({ name: "a" });
+    const taskCollection = createTaskCollection({ name: "a" });
     const subject = new ServerSyncer({ onTaskSynced });
     subject.register(taskCollection);
 

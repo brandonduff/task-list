@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import App, { TaskListView, createTaskCollection } from "./App";
-import TaskCollection from "./TaskCollection";
+import App, { TaskListView, buildTaskCollection } from "./App";
+import { createTaskCollection } from "./TaskCollection";
 import ServerSyncer from "./ServerSyncer";
 
 let updated = true;
@@ -19,7 +19,7 @@ test("renders main", () => {
 
 describe("TaskListView", () => {
   it("should display a list of tasks", function () {
-    const taskCollection = TaskCollection.create();
+    const taskCollection = createTaskCollection();
     taskCollection.add({ name: "do the dishes" });
 
     render(<TaskListView taskCollection={taskCollection} />);
@@ -28,7 +28,7 @@ describe("TaskListView", () => {
   });
 
   it("should rerender when taskCollection notifies of changes", function () {
-    const taskCollection = TaskCollection.create();
+    const taskCollection = createTaskCollection();
     render(<TaskListView taskCollection={taskCollection} />);
 
     act(() => {
@@ -41,46 +41,46 @@ describe("TaskListView", () => {
 
 describe("SortButton", () => {
   it("should have a button to sort the collection", function () {
-    const taskCollection = TaskCollection.create({ name: "b" }, { name: "a" });
+    const taskCollection = createTaskCollection({ name: "b" }, { name: "a" });
     render(<TaskListView taskCollection={taskCollection} />);
 
     fireEvent.click(screen.getByText("Sort"));
 
-    expect(taskCollection.entries[0].name).toEqual("a");
+    expect(taskCollection.getEntries()[0].name).toEqual("a");
   });
 });
 
 describe("AddButton", () => {
   it("should have a button to add a New Task", function () {
-    const taskCollection = TaskCollection.create();
+    const taskCollection = createTaskCollection();
     render(<TaskListView taskCollection={taskCollection} />);
 
     fireEvent.click(screen.getByText("Add New Task"));
 
-    expect(taskCollection.entries[0].name).toEqual("New Task");
+    expect(taskCollection.getEntries()[0].name).toEqual("New Task");
   });
 });
 
 describe("removing tasks", function () {
   it("should have a button to remove tasks", function () {
-    const taskCollection = TaskCollection.create({ name: "remove me" });
+    const taskCollection = createTaskCollection({ name: "remove me" });
     render(<TaskListView taskCollection={taskCollection} />);
 
     fireEvent.click(screen.getByText("x"));
 
-    expect(taskCollection.entries.length).toEqual(0);
+    expect(taskCollection.getEntries().length).toEqual(0);
   });
 });
 
 describe("TaskCollection", () => {
   test("can add tasks", () => {
-    const subject = TaskCollection.create();
+    const subject = createTaskCollection();
     subject.add({ name: "do the dishes" });
-    expect(subject.entries[0].name).toEqual("do the dishes");
+    expect(subject.getEntries()[0].name).toEqual("do the dishes");
   });
 
   test("notifies observers on add", () => {
-    const subject = TaskCollection.create();
+    const subject = createTaskCollection();
     subject.register(update);
 
     subject.add({ name: "a task" });
@@ -89,16 +89,16 @@ describe("TaskCollection", () => {
   });
 
   test("can be sorted", () => {
-    const subject = TaskCollection.create({ name: "b" }, { name: "a" });
+    const subject = createTaskCollection({ name: "b" }, { name: "a" });
 
     subject.sort();
 
-    expect(subject.entries[0].name).toEqual("a");
-    expect(subject.entries[1].name).toEqual("b");
+    expect(subject.getEntries()[0].name).toEqual("a");
+    expect(subject.getEntries()[1].name).toEqual("b");
   });
 
   test("notifies observers on sort", () => {
-    const subject = TaskCollection.create();
+    const subject = createTaskCollection();
     subject.register(update);
 
     subject.sort();
@@ -107,7 +107,7 @@ describe("TaskCollection", () => {
   });
 
   test("can remove tasks", () => {
-    const subject = TaskCollection.create();
+    const subject = createTaskCollection();
     subject.add({ name: "a" });
     subject.add({ name: "b" });
     subject.remove({ name: "a" });
@@ -115,7 +115,7 @@ describe("TaskCollection", () => {
   });
 
   test("notifies listeners on remove", () => {
-    const subject = TaskCollection.create();
+    const subject = createTaskCollection();
     subject.register(update);
     subject.remove({ name: "a" });
     expect(updated).toBeTruthy();
@@ -124,7 +124,7 @@ describe("TaskCollection", () => {
 
 test("create task collection links up server syncer", () => {
   const serverSyncer = new ServerSyncer({ onTaskSynced: update });
-  const taskCollection = createTaskCollection(serverSyncer);
+  const taskCollection = buildTaskCollection(serverSyncer);
 
   taskCollection.add({ name: "a" });
 

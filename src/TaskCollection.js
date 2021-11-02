@@ -1,46 +1,47 @@
-export default class TaskCollection {
-  static create(...entries) {
-    return new TaskCollection(...entries);
-  }
+export function createTaskCollection(...entries) {
+  const listeners = [];
+  const notifyListeners = () => {
+    listeners.forEach((listener) => listener(getEntries()));
+  };
 
-  constructor(...entries) {
-    this.entries = entries;
-    this.listeners = [];
-  }
+  const getEntries = () => {
+    return [...entries];
+  };
 
-  add(task) {
-    this.entries.push(task);
-    this.notifyListeners();
-  }
+  const register = (listener) => {
+    listeners.push(listener);
+  };
 
-  remove(candidate) {
-    const i = this.entries.findIndex((task) => task.name === candidate.name);
-    this.entries.splice(i, 1);
-    this.notifyListeners();
-  }
+  const remove = (candidate) => {
+    const i = entries.findIndex((task) => task.name === candidate.name);
+    entries.splice(i, 1);
+    notifyListeners();
+  };
 
-  last() {
-    return this.entries[this.entries.length - 1];
-  }
+  const add = (task) => {
+    entries.push(task);
+    notifyListeners();
+  };
 
-  getEntries() {
-    return [...this.entries];
-  }
+  const last = () => {
+    return entries[entries.length - 1];
+  };
 
-  sort() {
-    this.entries.sort((a, b) => {
+  const sort = () => {
+    entries.sort((a, b) => {
       if (a.name === b.name) return 0;
       else if (a.name < b.name) return -1;
       else return 1;
     });
-    this.notifyListeners();
-  }
+    notifyListeners();
+  };
 
-  notifyListeners() {
-    this.listeners.forEach((listener) => listener(this.getEntries()));
-  }
-
-  register(listener) {
-    this.listeners.push(listener);
-  }
+  return {
+    add,
+    sort,
+    last,
+    remove,
+    register,
+    getEntries,
+  };
 }
